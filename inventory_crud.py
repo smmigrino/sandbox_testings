@@ -11,7 +11,7 @@ items = Table("items", metadata, autoload_with=engine)
 with engine.connect() as conn:
     # INSERT (Sample item)
     stmt = insert(items).values(
-        sku="SKU-005",
+        sku="SKU-003",
         name="Sample Item 1",
         quantity=10,
         price=99.99
