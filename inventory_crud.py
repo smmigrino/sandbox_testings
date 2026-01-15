@@ -11,7 +11,7 @@ items = Table("items", metadata, autoload_with=engine)
 with engine.connect() as conn:
     # INSERT (Sample item)
     stmt = insert(items).values(
-        sku="SKU-004",
+        sku="SKU-005",
         name="Sample Item 1",
         quantity=10,
         price=99.99
@@ -23,4 +23,4 @@ with engine.connect() as conn:
     # SELECT (read all items)
     result = conn.execute(select(items))
     for row in result:
-        print(dict(row))
+        print(dict(row._mapping))
