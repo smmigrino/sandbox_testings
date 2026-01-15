@@ -22,4 +22,4 @@ items =  Table(
 
 metadata.create_all(engine)
 
-print("Table have been successfully create, you lucky dummy. hihihi.")
+print("Table have been successfully created, you lucky dummy. hihihi.")
