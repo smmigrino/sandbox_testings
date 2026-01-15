@@ -13,7 +13,7 @@ with engine.connect() as conn:
     stmt = insert(items).values(
         sku="SKU-001",
         name="Sample Item 1",
-        Quantity=10,
+        quantity=10,
         price=99.99
     )
     
