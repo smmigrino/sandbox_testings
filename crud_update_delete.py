@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine, MetaData, Table, update, delete, select
 
 engine = create_engine(
-    "mysql+mysqlconnector://root:@127.0.01:3306/sandbox_db",
+    "mysql+mysqlconnector://root:@127.0.0.1:3306/sandbox_db",
     future=True
 )
 
