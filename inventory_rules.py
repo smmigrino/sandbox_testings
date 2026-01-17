@@ -35,9 +35,9 @@ def update_quantity(sku: str, change: int):
         
 # ------ test cases ------
 
-update_quantity("SKU--01", -5)    #VALID
-update_quantity("SKU--01", -100)  #INVALID
-update_quantity("SKU--0999", -5)  #MISSING SKU
+update_quantity("SKU-01", -5)    #VALID
+update_quantity("SKU-01", -100)  #INVALID
+update_quantity("SKU-0999", -5)  #MISSING SKU
 
         
 
