@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, update, delete, select
+from sqlalchemy import MetaData, Table, select
 from db import engine
 
 metadata = MetaData()
