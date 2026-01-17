@@ -1,8 +1,5 @@
 from sqlalchemy import create_engine, MetaData, Table, select, update
-
-engine = create_engine(
-    "mysql+mysqlconnector://root:@127.0.0.1:3306/sandbox_db", future=True
-)
+from db import engine
 
 metadata = MetaData()
 items = Table("items", metadata, autoload_with=engine)
