@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, select, update
+from sqlalchemy import MetaData, Table, select, update
 from db import engine
 
 metadata = MetaData()
@@ -32,9 +32,10 @@ def update_quantity(sku: str, change: int):
         
 # ------ test cases ------
 
-update_quantity("SKU-001", -5)    #VALID
-update_quantity("SKU-001", -100)  #INVALID
-update_quantity("SKU-0999", -5)  #MISSING SKU
+#update_quantity("SKU-001", -5)    #VALID
+#update_quantity("SKU-001", -100)  #INVALID
+#update_quantity("SKU-0999", -5)  #MISSING SKU
+
 
         
 
