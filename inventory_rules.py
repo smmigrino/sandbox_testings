@@ -86,5 +86,9 @@ def create_item(sku: str, name: str, quantity: int, price: float):
         print(f"Item {sku} successfully created.")
         
 #---test cases----
-create_item("Tex-A0001","Auburn silk", 4, 9)
-create_item("Tex-A0002","Torquuoise silk", 8, 7)
+create_item("Tex-A0001","Auburn silk", 47, 9)
+create_item("Tex-A0002","Torquuoise silk", 9, 7)
+create_item("SKU-010", "New Item", 5, 50.00)     # VALID
+create_item("", "No SKU", 5, 10.00)              # INVALID
+create_item("SKU-010", "Duplicate", 3, 20.00)    # DUPLICATE
+create_item("SKU-011", "Bad Price", 5, -10)      # INVALID
