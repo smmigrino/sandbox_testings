@@ -6,6 +6,15 @@ items = Table("items", metadata, autoload_with=engine)
 
 def update_quantity(sku: str, change: int):
     with engine.connect() as conn:
+        
+        if not sku or not sku.strip():
+            print("Operation denied: SKU cannot be empty.")
+            return
+        
+        if not isinstance(change, int):
+            print("Operation denied: change must be an integer.")
+            return
+        
         # READ current quantity
         result = conn.execute(
             select(items.c.quantity).where(items.c.sku == sku)
@@ -56,7 +65,11 @@ def create_item(sku: str, name: str, quantity: int, price: float):
     if quantity < 0:
         print("Operation denied: QUANTITY must not be a negative value.")
         return
-        
+    
+    if not isinstance(price, (int, float)):
+        print("Operation denied: PRICE must be a number.")
+        return
+    
     if price < 0:
         print("Operation denied: PRICE must not be a negative value.")
         return
