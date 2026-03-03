@@ -10,7 +10,7 @@ items =  Table(
     metadata,
     Column("id", Integer, primary_key=True, autoincrement=True),
     Column("sku", String(50), nullable=False, unique=True),
-    Column("name", String(255), nullable=False),
+    Column("name", String(255), nullable=False, unique=True),
     Column("quantity", Integer, nullable=False, default=0),
     Column("price", Numeric(10, 2), nullable=False),
     

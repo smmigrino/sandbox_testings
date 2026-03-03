@@ -4,6 +4,7 @@ from db import engine
 metadata = MetaData()
 items = Table("items", metadata, autoload_with=engine)
 
+#------ UPDATE QUANTITY FUNCTION WITH VALIDATION RULES ------
 def update_quantity(sku: str, change: int):
     with engine.connect() as conn:
         
@@ -47,7 +48,7 @@ def update_quantity(sku: str, change: int):
 
 #--------------------------------------------
 
-
+#------ CREATE / ADD ITEM FUNCTION WITH VALIDATION RULES ------
 def create_item(sku: str, name: str, quantity: int, price: float):
     # ---- Basic Validation ----
     if not sku or not sku.strip():
@@ -78,14 +79,22 @@ def create_item(sku: str, name: str, quantity: int, price: float):
     
     with engine.connect() as conn:
         #Check if SKU exist
-        existing = conn.execute(
+        existing_sku = conn.execute(
             select(items.c.id).where(items.c.sku == sku)
         ).fetchone()
         
-        if existing:
+        if existing_sku:
             print(f"Operation Denied: SKU {sku} already exist")
             return
             
+        existing_name = conn.execute(
+            select(items.c.id).where(items.c.name == name)
+        ).fetchone()
+        
+        if existing_name:
+            print(f"Operation Denied: NAME {name} already exist")
+            return
+        
         conn.execute(
             insert(items).values(
                 sku=sku,
@@ -99,9 +108,75 @@ def create_item(sku: str, name: str, quantity: int, price: float):
         print(f"Item {sku} successfully created.")
         
 #---test cases----
-create_item("Tex-A0001","Auburn silk", 47, 9)
-create_item("Tex-A0002","Torquuoise silk", 9, 7)
-create_item("SKU-010", "New Item", 5, 50.00)     # VALID
-create_item("", "No SKU", 5, 10.00)              # INVALID
-create_item("SKU-010", "Duplicate", 3, 20.00)    # DUPLICATE
-create_item("SKU-011", "Bad Price", 5, -10)      # INVALID
+#create_item("Tex-A0001","Auburn silk", 47, 9)
+#create_item("Tex-A0002","Torquuoise silk", 9, 7)
+#create_item("SKU-010", "New Item", 5, 50.00)     # VALID
+#create_item("", "No SKU", 5, 10.00)              # INVALID
+#create_item("SKU-010", "Duplicate", 3, 20.00)    # DUPLICATE
+#create_item("SKU-011", "Bad Price", 5, -10)      # INVALID
+
+#--------------------------------------------
+
+#------ DELETE ITEM FUNCTION WITH VALIDATION RULES ------
+def delete_item(sku: str):
+    # ---- Basic Validation ----
+    if not sku or not sku.strip():
+        print("Operation denied: SKU cannot be empty.")
+        return
+    
+    # ---- Database Operation ----
+    with engine.connect() as conn:
+        result = conn.execute(
+            select(items.c.id).where(items.c.sku == sku)
+        ).fetchone()
+        
+        if result is None:
+            print(f"SKU {sku} not found.")
+            return
+        
+        conn.execute(
+            items.delete().where(items.c.sku == sku)
+        )
+        conn.commit()
+        print(f"SKU {sku} successfully deleted.")   
+        
+#---test cases----
+#delete_item("SKU-010")   #VALID
+#delete_item("")          #INVALID
+#delete_item("SKU-999")   #MISSING SKU
+
+#--------------------------------------------
+#------ PRINT ITEM FUNCTION WITH VALIDATION RULES ------
+    #user input can be either SKU or NAME, but not both empty. If both provided,
+    #it will search for items matching either criteria (OR condition).
+
+def print_item(sku: str = None, name: str = None):
+
+    if (not sku or not sku.strip()) and (not name or not name.strip()):
+        print("Operation denied: provide SKU or NAME.")
+        return
+
+    with engine.connect() as conn:
+
+        query = select(items)
+
+        if sku and sku.strip():
+            query = query.where(items.c.sku == sku)
+
+        if name and name.strip():
+            query = query.where(items.c.name == name)
+
+        result = conn.execute(query).fetchall()
+
+        if not result:
+            print("No matching item found.")
+            return
+
+        for row in result:
+            print(
+                f"ID: {row.id}, "
+                f"SKU: {row.sku}, "
+                f"NAME: {row.name}, "
+                f"QUANTITY: {row.quantity}, "
+                f"PRICE: {row.price}"
+            )
